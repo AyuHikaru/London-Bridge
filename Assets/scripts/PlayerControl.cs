@@ -14,10 +14,25 @@ public class PlayerControl : MonoBehaviour
     public bool bJump = false;
     public float JumpForce = 100;
     private Transform mGroundCheck;
+<<<<<<< Updated upstream
+=======
+    Animator anim;
+
+    public AudioClip[] JumpClips;
+    public AudioSource audioSource;
+    public AudioMixer audioMixer;
+
+    float mVolume = 0;
+>>>>>>> Stashed changes
     void Start()
     {
         HeroBody = GetComponent<Rigidbody2D>();
         mGroundCheck = transform.Find("GroundCheck");
+<<<<<<< Updated upstream
+=======
+        anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+>>>>>>> Stashed changes
     }
 
     // Update is called once per frame
@@ -33,7 +48,7 @@ public class PlayerControl : MonoBehaviour
         {
             HeroBody.velocity = new Vector2(Mathf.Sign(HeroBody.velocity.x) * MaxSpeed, HeroBody.velocity.y);
         }
-
+        anim.SetFloat("Speed", Mathf.Abs(h));
         if(h>0&&!bFaceRight)
         {
             flip();
@@ -48,16 +63,27 @@ public class PlayerControl : MonoBehaviour
             if(Input.GetButtonDown("Jump"))
             {
                 bJump = true;
-
+                
             }
         }
     }
     private void FixedUpdate()
     {
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            mVolume++;
+            audioMixer.SetFloat("MasterVolume", mVolume);
+        }
+        if(Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            mVolume--;
+            audioMixer.SetFloat("MasterVolume", mVolume);
+        }
         if(bJump)
         {
             HeroBody.AddForce(Vector2.up * JumpForce);
             bJump = false;
+            anim.SetTrigger("jump");
         }
     }
     private void flip()
